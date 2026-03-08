@@ -211,7 +211,7 @@ exports.getAllWriters = async () => {
         const result = await client.query(
             `SELECT * FROM writer_profiles ORDER BY created_at DESC`
         );
-        if(result.rows.length === 0){
+        if(result.rowCount === 0){
             return {message:"No writers yet"}
         }
         const writers = result.rows

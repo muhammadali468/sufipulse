@@ -11,7 +11,7 @@ router.get("/read-profile", verifyUser, writerProfileRead)
 // http:localhost:5000/api/writer/read-profile
 router.post("/update-profile", verifyUser, writerProfileUpdate)
 // http:localhost:5000/api/writer/delete-profile
-router.post("/delete-profile", verifyUser, writerProfileDelete)
+router.delete("/delete-profile", verifyUser, writerProfileDelete)
 // http:localhost:5000/api/writer/delete-profile
 router.get("/get-all", verifyUser, verifyAdmin, writerGetAll)
 

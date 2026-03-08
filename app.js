@@ -6,6 +6,7 @@ const app = express()
 const session = require("express-session")
 const authRoutes = require("./routes/auth.routes");
 const writerRoutes = require("./routes/writer.routes");
+const kalamRoutes = require("./routes/kalam.routes");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const cors = require("cors")
@@ -28,6 +29,7 @@ app.use(passport.session())
 
 app.use("/api/auth", authRoutes)
 app.use("/api/writer", writerRoutes)
+app.use("/api/kalam", kalamRoutes)
 
 
 
