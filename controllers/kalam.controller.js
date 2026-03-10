@@ -34,6 +34,64 @@ exports.getUserKalams = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+exports.updateKalam = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { kalamId } = req.params;
+        const { title, content, language, writing_style } = req.body;
+
+        const result = await kalamService.updateKalamService(
+            userId,
+            kalamId,
+            title,
+            content,
+            language,
+            writing_style
+        );
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.deleteKalam = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { kalamId } = req.params;
+
+        const result = await kalamService.deleteKalamService(userId, kalamId);
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.updateKalamStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, revision_notes } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ error: "Status is required" });
+    }
+
+    const result = await kalamService.updateKalamStatusService(
+      id,
+      status,
+      revision_notes
+    );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("updateKalamStatus error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 
 

@@ -68,4 +68,81 @@ exports.getUserKalamsService = async (id) => {
         throw error;
     }
 };
+exports.updateKalamService = async (userId, kalamId, title, content, language, writing_style) => {
+    try {
+        const client = await pool.connect();
+
+        const result = await client.query(
+            `UPDATE kalams k
+             SET title=$1,
+                 content=$2,
+                 language=$3,
+                 writing_style=$4,
+                 updated_at=NOW()
+             FROM writer_profiles w
+             WHERE k.writer_id = w.id
+             AND w.user_id = $5
+             AND k.id = $6
+             RETURNING k.*`,
+            [title, content, language, writing_style, userId, kalamId]
+        );
+
+        client.release();
+
+        if (result.rows.length === 0) {
+            throw new Error("Kalam not found or unauthorized");
+        }
+
+        return result.rows[0];
+
+    } catch (error) {
+        console.error("updateKalamService error:", error);
+        throw error;
+    }
+};
+exports.deleteKalamService = async (userId, kalamId) => {
+    try {
+        const client = await pool.connect();
+
+        const result = await client.query(
+            `DELETE FROM kalams k
+             USING writer_profiles w
+             WHERE k.writer_id = w.id
+             AND w.user_id = $1
+             AND k.id = $2
+             RETURNING k.id`,
+            [userId, kalamId]
+        );
+
+        client.release();
+
+        if (result.rows.length === 0) {
+            throw new Error("Kalam not found or unauthorized");
+        }
+
+        return { message: "Kalam deleted successfully" };
+
+    } catch (error) {
+        console.error("deleteKalamService error:", error);
+        throw error;
+    }
+};
+exports.updateKalamStatusService = async (id, status, revision_notes) => {
+  const client = await pool.connect();
+
+  try {
+    const result = await client.query(
+      `UPDATE kalams
+       SET status = $1,
+           revision_notes = $2
+       WHERE id = $3
+       RETURNING *`,
+      [status, revision_notes || null, id]
+    );
+
+    return result;
+  } finally {
+    client.release();
+  }
+};
 

@@ -13,5 +13,8 @@ router.post("/create", [
 
 router.get("/get-all", verifyUser, verifyAdmin, kalamController.getAllKalamsAdmin)
 router.get("/get-all-user", verifyUser, kalamController.getUserKalams)
+router.put("/:kalamId", verifyUser, kalamController.updateKalam);
+router.delete("/:kalamId", verifyUser, kalamController.deleteKalam);
+router.patch("/update-status/:id", verifyUser, kalamController.updateKalamStatus);
 
 module.exports = router
