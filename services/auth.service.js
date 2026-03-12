@@ -13,7 +13,7 @@ exports.registerUser = async (full_name, email, password) => {
             [email]
         );
         if (userExists.rows.length > 0) {
-            throw new Error("User already exists");
+            throw new Error("Email already registered");
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         // generate OTP
