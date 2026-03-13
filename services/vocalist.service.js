@@ -6,7 +6,7 @@ exports.vocalistProfileCreateService = async (
     country,
     city,
     email,
-    years_of_experience,
+    years_experience,
     vocal_range,
     performance_styles,
     languages_performed,
@@ -39,7 +39,7 @@ exports.vocalistProfileCreateService = async (
                 country,
                 city,
                 email,
-                years_of_experience,
+                years_experience,
                 vocal_range,
                 performance_styles,
                 languages_performed,
@@ -60,7 +60,7 @@ exports.vocalistProfileCreateService = async (
                 country,
                 city,
                 email,
-                years_of_experience,
+                years_experience,
                 vocal_range,
                 performance_styles,
                 languages_performed,
@@ -94,7 +94,7 @@ exports.vocalistProfileReadService = async (user_id) => {
     try {
 
         const result = await client.query(
-            "SELECT * FROM vocalists WHERE user_id=$1",
+            "SELECT * FROM vocalists WHERE id=$1",
             [user_id]
         );
 
@@ -123,7 +123,7 @@ exports.vocalistProfileUpdateService = async (
         country,
         city,
         email,
-        years_of_experience,
+        years_experience,
         vocal_range,
         performance_styles,
         languages_performed,
@@ -148,7 +148,7 @@ exports.vocalistProfileUpdateService = async (
                 country=$3,
                 city=$4,
                 email=$5,
-                years_of_experience=$6,
+                years_experience=$6,
                 vocal_range=$7,
                 performance_styles=$8,
                 languages_performed=$9,
@@ -159,7 +159,7 @@ exports.vocalistProfileUpdateService = async (
                 accept_producer_coordination=$14,
                 accept_framework=$15,
                 updated_at=NOW()
-            WHERE user_id=$16
+            WHERE id=$16
             RETURNING *`,
             [
                 full_name,
@@ -167,7 +167,7 @@ exports.vocalistProfileUpdateService = async (
                 country,
                 city,
                 email,
-                years_of_experience,
+                years_experience,
                 vocal_range,
                 performance_styles,
                 languages_performed,
@@ -208,7 +208,7 @@ exports.vocalistProfileDeleteService = async (user_id) => {
     try {
 
         const result = await client.query(
-            "DELETE FROM vocalists WHERE user_id=$1 RETURNING *",
+            "DELETE FROM vocalists WHERE id=$1 RETURNING *",
             [user_id]
         );
 
