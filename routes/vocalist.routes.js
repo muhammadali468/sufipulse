@@ -15,4 +15,11 @@ router.delete("/delete", verifyUser, vocalistController.vocalistProfileDelete);
 
 router.get("/all", verifyUser, verifyAdmin, vocalistController.vocalistGetAll);
 
+router.patch(
+    "/update-status/:id",
+    verifyUser,
+    verifyAdmin,
+    vocalistController.updateVocalistStatus
+);
+
 module.exports = router;

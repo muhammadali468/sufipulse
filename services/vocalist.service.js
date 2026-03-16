@@ -24,7 +24,7 @@ exports.vocalistProfileCreateService = async (
     try {
 
         const profileExists = await client.query(
-            "SELECT * FROM vocalists WHERE id=$1",
+            "SELECT * FROM vocalists WHERE user_id=$1",
             [user_id]
         );
 
@@ -49,7 +49,7 @@ exports.vocalistProfileCreateService = async (
                 willing_editorial_approval,
                 accept_producer_coordination,
                 accept_framework,
-                id
+                user_id
             )
             VALUES(
                 $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
@@ -94,7 +94,7 @@ exports.vocalistProfileReadService = async (user_id) => {
     try {
 
         const result = await client.query(
-            "SELECT * FROM vocalists WHERE id=$1",
+            "SELECT * FROM vocalists WHERE user_id=$1",
             [user_id]
         );
 
@@ -132,7 +132,7 @@ exports.vocalistProfileUpdateService = async (
         worked_in_studio,
         willing_editorial_approval,
         accept_producer_coordination,
-        accept_framework
+        accept_framework,
     }
 ) => {
 
@@ -159,7 +159,7 @@ exports.vocalistProfileUpdateService = async (
                 accept_producer_coordination=$14,
                 accept_framework=$15,
                 updated_at=NOW()
-            WHERE id=$16
+            WHERE user_id=$16
             RETURNING *`,
             [
                 full_name,
@@ -228,6 +228,39 @@ exports.vocalistProfileDeleteService = async (user_id) => {
     }
 };
 
+exports.updateVocalistStatusService = async (id, status) => {
+    const client = await pool.connect();
+
+    try {
+
+        const result = await client.query(
+            `UPDATE vocalists
+             SET
+                status = $1,
+                updated_at = NOW()
+             WHERE id = $2
+             RETURNING *`,
+            [status, id]
+        );
+
+        if (result.rows.length === 0) {
+            throw new Error("Vocalist not found");
+        }
+
+        return {
+            message: "Vocalist status updated successfully",
+            vocalist: result.rows[0]
+        };
+
+    } catch (error) {
+
+        console.log("updateVocalistStatusService", error);
+        throw error;
+
+    } finally {
+        client.release();
+    }
+};
 
 exports.getAllVocalists = async () => {
 

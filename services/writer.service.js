@@ -181,6 +181,37 @@ exports.writerProfileUpdateService = async (
         client.release();
     }
 };
+// Update writer status (Admin)
+exports.updateWriterStatusService = async (writerId, newStatus) => {
+    const client = await pool.connect();
+
+    try {
+        const result = await client.query(
+            `UPDATE writer_profiles
+             SET
+                profile_status = $1,
+                updated_at = NOW()
+             WHERE id = $2
+             RETURNING *`,
+            [newStatus, writerId]
+        );
+
+        if (result.rows.length === 0) {
+            throw new Error("Writer not found");
+        }
+
+        return {
+            message: "Writer status updated successfully",
+            writer: result.rows[0]
+        };
+
+    } catch (error) {
+        console.log("updateWriterStatus", error);
+        throw error;
+    } finally {
+        client.release();
+    }
+};
 
 // Delete writer profile
 exports.writerProfileDeleteService = async (user_id) => {

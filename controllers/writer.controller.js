@@ -67,6 +67,19 @@ exports.writerProfileUpdate = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+// UPDATE STATUS
+exports.updateWriterStatus = async (req, res) => {
+    try {
+        const writer_id = req.params.id;
+        const { status } = req.body;
+
+        const result = await writerService.updateWriterStatusService(writer_id, status);
+
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
 
 // DELETE
 exports.writerProfileDelete = async (req, res) => {

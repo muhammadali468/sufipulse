@@ -23,7 +23,7 @@ exports.vocalistProfileCreate = async (req, res) => {
         } = sanitizeInput(req.body);
 
         const user_id = req.user.id;
-console.log(user_id)
+        console.log("user_id", user_id)
         const result = await vocalistService.vocalistProfileCreateService(
             full_name,
             performance_name,
@@ -53,6 +53,7 @@ console.log(user_id)
 exports.vocalistProfileRead = async (req, res) => {
     try {
         const user_id = req.user.id;
+        console.log(user_id)
         const profile = await vocalistService.vocalistProfileReadService(user_id);
         res.status(200).json(profile);
     } catch (error) {
@@ -65,7 +66,6 @@ exports.vocalistProfileUpdate = async (req, res) => {
     try {
         const user_id = req.user.id;
         const { ...updateData } = sanitizeInput(req.body);
-
         const result = await vocalistService.vocalistProfileUpdateService(user_id, updateData);
 
         res.status(200).json({
@@ -110,5 +110,25 @@ exports.vocalistGetAll = async (req, res) => {
 
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+};
+
+// UPDATE STATUS
+exports.updateVocalistStatus = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        const { status, revision_notes } = req.body;
+
+        const result = await vocalistService.updateVocalistStatusService(
+            id,
+            status,
+            revision_notes
+        );
+
+        res.status(200).json(result);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
